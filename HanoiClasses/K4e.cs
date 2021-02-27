@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Hanoi.HanoiClasses
 {
-    class C4 : Tower
+    class K4e : Tower
     {
-        public C4(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
+        public K4e(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
         {
             startArray = ArrayAllEqual(StartPeg);
             finalState = StateAllEqual(FinalPeg);
@@ -16,7 +16,7 @@ namespace Hanoi.HanoiClasses
             setCurrent = new HashSet<long>();
             setNew = new Queue<long>();
 
-            
+
             currentDistance = 0;
             initialState = StateToLong(startArray);
             setCurrent.Add(initialState);
@@ -37,7 +37,7 @@ namespace Hanoi.HanoiClasses
                 {
                     if (state[i] == 0)
                     {
-                        foreach (byte j in new byte[] { 2, 3 })
+                        foreach (byte j in new byte[] { 1, 2, 3 })
                         {
                             if (innercanMoveArray[j])
                             {
@@ -54,13 +54,13 @@ namespace Hanoi.HanoiClasses
                                     }
                                 }
 
-                                
+
                             }
                         }
                     }
                     else if (state[i] == 1)
                     {
-                        foreach (byte j in new byte[] { 2, 3 })
+                        foreach (byte j in new byte[] {0, 2, 3 })
                         {
                             if (innercanMoveArray[j])
                             {
@@ -76,7 +76,7 @@ namespace Hanoi.HanoiClasses
                                         setNew.Enqueue(innercurrentState);
                                     }
                                 }
-                                
+
                             }
                         }
                     }
@@ -87,18 +87,18 @@ namespace Hanoi.HanoiClasses
                             if (innercanMoveArray[j])
                             {
                                 innernewState = new byte[state.Length];
-                                 for (int x = 0; x < state.Length; x++)
-                                     innernewState[x] = state[x];
-                                 innernewState[i] = j;
-                                 long innercurrentState = StateToLong(innernewState);
-                                 if (!setPrev.Contains(innercurrentState))
-                                 {
+                                for (int x = 0; x < state.Length; x++)
+                                    innernewState[x] = state[x];
+                                innernewState[i] = j;
+                                long innercurrentState = StateToLong(innernewState);
+                                if (!setPrev.Contains(innercurrentState))
+                                {
                                     lock (setNew)
                                     {
                                         setNew.Enqueue(innercurrentState);
                                     }
                                 }
-                                
+
                             }
                         }
                     }
@@ -119,9 +119,9 @@ namespace Hanoi.HanoiClasses
                                     {
                                         setNew.Enqueue(innercurrentState);
                                     }
-                                    
+
                                 }
-                                
+
                             }
                         }
                     }
@@ -132,3 +132,4 @@ namespace Hanoi.HanoiClasses
 
     }
 }
+

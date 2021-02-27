@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HanoiFinal.HanoiClasses;
+using Hanoi.HanoiClasses;
 
 
-namespace HanoiFinal
+namespace Hanoi
 {
     class Searcher
     {

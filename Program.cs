@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using HanoiFinal.HanoiClasses;
-namespace HanoiFinal
+using Hanoi.HanoiClasses;
+
+namespace Hanoi
 {
     class Program
     {
@@ -17,9 +18,9 @@ namespace HanoiFinal
                 k = int.Parse(Console.ReadLine());
             }
             while (k <= 0 || k > 15);
-            
-            
 
+
+            Console.WriteLine("*******RUNING PROGRAM*******");
             Console.WriteLine($"Running case: {type} with {k} discs:");
             Stopwatch sw = Stopwatch.StartNew();
 

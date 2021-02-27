@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HanoiFinal.HanoiClasses
+namespace Hanoi.HanoiClasses
 {
     interface TowerOfHanoi
     {
-        void AddNewState(byte[] state, int disc, byte toPeg);
+        //void AddNewState(byte[] state, out byte[] newState, int disc, byte toPeg);
         long StateToLong(byte[] state);
         long FinalState();
         byte[] LongToState(long num);
@@ -108,17 +108,21 @@ namespace HanoiFinal.HanoiClasses
 
         public void AddNewState(byte[] state, int disc, byte toPeg)
         {
-            byte[] newState = new byte[state.Length];
+            byte [] newState = new byte[state.Length];
             for (int x = 0; x < state.Length; x++)
                 newState[x] = state[x];
             newState[disc] = toPeg;
             currentState = StateToLong(newState);
             if (!setPrev.Contains(currentState) && !setIgnore.Contains(currentState))
-            {
-                setNew.Enqueue(currentState);
+            {   
+                lock(setNew)
+                {
+                    setNew.Enqueue(currentState);
+                }
+                
             }
         }
-
+        
         public void incrementCurrentDistance()
         {
             this.currentDistance++;

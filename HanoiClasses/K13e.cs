@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Hanoi.HanoiClasses
 {
-    class C4 : Tower
+    class K13e : Tower
     {
-        public C4(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
+        public K13e(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
         {
             startArray = ArrayAllEqual(StartPeg);
             finalState = StateAllEqual(FinalPeg);
@@ -16,7 +16,7 @@ namespace Hanoi.HanoiClasses
             setCurrent = new HashSet<long>();
             setNew = new Queue<long>();
 
-            
+
             currentDistance = 0;
             initialState = StateToLong(startArray);
             setCurrent.Add(initialState);
@@ -27,86 +27,61 @@ namespace Hanoi.HanoiClasses
 
         public override void MakeMoveForSmallDimension(byte[] state)
         {
-            bool[] innercanMoveArray = new bool[this.NumPegs];
-            ResetArray(innercanMoveArray);
+            bool[] InnercanMoveArray = new bool[this.NumPegs];
+            ResetArray(InnercanMoveArray); //can move array je globalna
             byte[] innernewState;
 
             for (int i = 0; i < NumDiscs; i++)
             {
-                if (innercanMoveArray[state[i]])
+                if (InnercanMoveArray[state[i]])
                 {
                     if (state[i] == 0)
                     {
-                        foreach (byte j in new byte[] { 2, 3 })
+                        for (byte j = 1; j < NumPegs; j++)
                         {
-                            if (innercanMoveArray[j])
+                            if (InnercanMoveArray[j])
                             {
                                 innernewState = new byte[state.Length];
                                 for (int x = 0; x < state.Length; x++)
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
-                                long innercurrentState = StateToLong(innernewState);
+                                long innercurrentState = StateToLong(innernewState); // new state je globalna
+                                // Zaradi takih preverjanj potrebujemo hitro iskanje!
                                 if (!setPrev.Contains(innercurrentState))
                                 {
                                     lock (setNew)
                                     {
                                         setNew.Enqueue(innercurrentState);
                                     }
-                                }
 
-                                
+                                }
                             }
                         }
                     }
                     else if (state[i] == 1)
                     {
-                        foreach (byte j in new byte[] { 2, 3 })
+                        if (InnercanMoveArray[0])
                         {
-                            if (innercanMoveArray[j])
+                            innernewState = new byte[state.Length];
+                            for (int x = 0; x < state.Length; x++)
+                                innernewState[x] = state[x];
+                            innernewState[i] = 0;
+                            long innercurrentState = StateToLong(innernewState);
+                            if (!setPrev.Contains(innercurrentState))
                             {
-                                innernewState = new byte[state.Length];
-                                for (int x = 0; x < state.Length; x++)
-                                    innernewState[x] = state[x];
-                                innernewState[i] = j;
-                                long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                lock (setNew)
                                 {
-                                    lock (setNew)
-                                    {
-                                        setNew.Enqueue(innercurrentState);
-                                    }
+                                    setNew.Enqueue(innercurrentState);
                                 }
-                                
+
                             }
                         }
                     }
                     else if (state[i] == 2)
                     {
-                        foreach (byte j in new byte[] { 0, 1 })
+                        foreach (byte j in new byte[] { 0, 3 })
                         {
-                            if (innercanMoveArray[j])
-                            {
-                                innernewState = new byte[state.Length];
-                                 for (int x = 0; x < state.Length; x++)
-                                     innernewState[x] = state[x];
-                                 innernewState[i] = j;
-                                 long innercurrentState = StateToLong(innernewState);
-                                 if (!setPrev.Contains(innercurrentState))
-                                 {
-                                    lock (setNew)
-                                    {
-                                        setNew.Enqueue(innercurrentState);
-                                    }
-                                }
-                                
-                            }
-                        }
-                    }
-                    else if (state[i] == 3)
-                    {
-                        foreach (byte j in new byte[] { 0, 1 })
-                        {
-                            if (innercanMoveArray[j])
+                            if (InnercanMoveArray[j])
                             {
                                 innernewState = new byte[state.Length];
                                 for (int x = 0; x < state.Length; x++)
@@ -119,16 +94,36 @@ namespace Hanoi.HanoiClasses
                                     {
                                         setNew.Enqueue(innercurrentState);
                                     }
-                                    
+
                                 }
-                                
+                            }
+                        }
+                    }
+                    else if (state[i] == 3)
+                    {
+                        foreach (byte j in new byte[] { 0, 2 })
+                        {
+                            if (InnercanMoveArray[j])
+                            {
+                                innernewState = new byte[state.Length];
+                                for (int x = 0; x < state.Length; x++)
+                                    innernewState[x] = state[x];
+                                innernewState[i] = j;
+                                long innercurrentState = StateToLong(innernewState);
+                                if (!setPrev.Contains(innercurrentState))
+                                {
+                                    lock (setNew)
+                                    {
+                                        setNew.Enqueue(innercurrentState);
+                                    }
+
+                                }
                             }
                         }
                     }
                 }
-                innercanMoveArray[state[i]] = false;
+                InnercanMoveArray[state[i]] = false;
             }
         }
-
     }
 }

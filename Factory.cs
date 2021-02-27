@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using HanoiFinal.HanoiClasses;
+using Hanoi.HanoiClasses;
 
-namespace HanoiFinal
+namespace Hanoi
 {
     static class Factory
     {
@@ -13,8 +13,29 @@ namespace HanoiFinal
 
             switch(type)
             {
+                case HanoiTowerType.K13_01:
+                    stolp = new K13_01FAST(0, 1, DiscNumber);
+                    break;
+                case HanoiTowerType.K13_12:
+                    stolp = new K13_12(1, 2, DiscNumber);
+                    break;
+                case HanoiTowerType.K13e_01:
+                    stolp = new K13e(0, 1, DiscNumber);
+                    break;
+                case HanoiTowerType.K13e_12:
+                    stolp = new K13e(1, 2, DiscNumber);
+                    break;
+                case HanoiTowerType.K13e_23:
+                    stolp = new K13e(2, 3, DiscNumber);
+                    break;
+                case HanoiTowerType.K13e_30:
+                    stolp = new K13e(3, 0, DiscNumber);
+                    break;
                 case HanoiTowerType.C4_01:
                     stolp = new C4(0, 1, DiscNumber);
+                    break;
+                case HanoiTowerType.C4_12:
+                    stolp = new C4(1, 2, DiscNumber);
                     break;
                 case HanoiTowerType.K4:
                     stolp = new K4(0, 1, DiscNumber);
@@ -30,6 +51,15 @@ namespace HanoiFinal
                     break;
                 case HanoiTowerType.P4_31:
                     stolp = new P4(3, 1, DiscNumber);
+                    break;
+                case HanoiTowerType.K4e_01:
+                    stolp = new K4e(0, 1, DiscNumber);
+                    break;
+                case HanoiTowerType.K4e_12:
+                    stolp = new K4e(1, 2, DiscNumber);
+                    break;
+                case HanoiTowerType.K4e_23:
+                    stolp = new K4e(2, 3, DiscNumber);
                     break;
                 default:
                     Console.WriteLine("ni definiran");

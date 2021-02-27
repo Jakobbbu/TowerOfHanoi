@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HanoiFinal.HanoiClasses
+namespace Hanoi.HanoiClasses
 {
     class P4 : Tower
     {
