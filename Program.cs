@@ -32,7 +32,7 @@ namespace Hanoi
                 int length = searcher.SearchShortestPath();
 
                 Console.WriteLine();
-                Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds}");
+                Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds} seconds");
                 Console.WriteLine();
 
             }
