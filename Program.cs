@@ -6,42 +6,44 @@ namespace Hanoi
 {
     class Program
     {
+       
         static void Main(string[] args)
         {
-            Console.WriteLine("*******Tower Of Hanoi*******");
-            HanoiTowerType type = SelectHanoiType();
+            while (true){
+                Console.WriteLine("*******Tower Of Hanoi*******");
+                HanoiTowerType type = SelectHanoiType();
 
-            int k;
-            do
-            {
-                Console.Write("Enter number of discs(1 - 15): ");
-                k = int.Parse(Console.ReadLine());
+                int k;
+                do
+                {
+                    Console.Write("Enter number of discs(1 - 15): ");
+                    k = int.Parse(Console.ReadLine());
+                }
+                while (k <= 0 || k > 15);
+
+
+                Console.WriteLine("*******RUNING PROGRAM*******");
+                Console.WriteLine($"Running case: {type} with {k} discs:");
+                Stopwatch sw = Stopwatch.StartNew();
+
+
+                Tower tower = Factory.GetTower(type, k);
+                if (tower != null)
+                {
+                    Searcher searcher = new Searcher(tower);
+                    int length = searcher.SearchShortestPath();
+
+                    Console.WriteLine();
+                    Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds}");
+                    Console.WriteLine();
+
+                }
+                else
+                {
+                    Console.WriteLine("ni definiran");
+                }
+
             }
-            while (k <= 0 || k > 15);
-
-
-            Console.WriteLine("*******RUNING PROGRAM*******");
-            Console.WriteLine($"Running case: {type} with {k} discs:");
-            Stopwatch sw = Stopwatch.StartNew();
-
-
-            Tower tower = Factory.GetTower(type, k);
-            if(tower != null)
-            {
-                Searcher searcher = new Searcher(tower);
-                int length = searcher.SearchShortestPath();
-
-                Console.WriteLine();
-                Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds}");
-                Console.WriteLine();
-
-            }
-            else
-            {
-                Console.WriteLine("ni definiran");
-            }
-
-
         }
 
 

@@ -6,7 +6,7 @@ namespace Hanoi.HanoiClasses
 {
     interface TowerOfHanoi
     {
-        //void AddNewState(byte[] state, out byte[] newState, int disc, byte toPeg);
+        void AddNewState(byte[] state, int disc, byte toPeg);
         long StateToLong(byte[] state);
         long FinalState();
         byte[] LongToState(long num);
