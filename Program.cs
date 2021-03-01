@@ -33,9 +33,9 @@ namespace Hanoi
                     Searcher searcher = new Searcher(tower);
                     int length = searcher.SearchShortestPath();
 
-                    Console.WriteLine();
-                    Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds}");
-                    Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds} seconds");
+                Console.WriteLine();
 
                 }
                 else
