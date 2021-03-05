@@ -10,39 +10,38 @@ namespace Hanoi
         static void Main(string[] args)
         {
             while (true){
-                Console.WriteLine("*******Tower Of Hanoi*******");
-                HanoiTowerType type = SelectHanoiType();
+                 Console.WriteLine("*******Tower Of Hanoi*******");
+                 HanoiTowerType type = SelectHanoiType();
 
-                int k;
-                do
-                {
-                    Console.Write("Enter number of discs(1 - 15): ");
-                    k = int.Parse(Console.ReadLine());
-                }
-                while (k <= 0 || k > 15);
-
-
-                Console.WriteLine("*******RUNING PROGRAM*******");
-                Console.WriteLine($"Running case: {type} with {k} discs:");
-                Stopwatch sw = Stopwatch.StartNew();
+                 int k;
+                 do
+                 {
+                     Console.Write("Enter number of discs(1 - 15): ");
+                     k = int.Parse(Console.ReadLine());
+                 }
+                 while (k <= 0 || k > 15);
 
 
-                Tower tower = Factory.GetTower(type, k);
-                if (tower != null)
-                {
-                    Searcher searcher = new Searcher(tower);
-                    int length = searcher.SearchShortestPath();
+                 Console.WriteLine("*******RUNING PROGRAM*******");
+                 Console.WriteLine($"Running case: {type} with {k} discs:");
+                 Stopwatch sw = Stopwatch.StartNew();
 
-                Console.WriteLine();
-                Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds} seconds");
-                Console.WriteLine();
+
+                 Tower tower = Factory.GetTower(type, k);
+                 if (tower != null)
+                 {
+                     Searcher searcher = new Searcher(tower);
+                     int length = searcher.SearchShortestPath();
+
+                    Console.WriteLine();
+                    Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds} seconds");
+                    Console.WriteLine();
 
                 }
                 else
                 {
                     Console.WriteLine("ni definiran");
                 }
-
             }
         }
 

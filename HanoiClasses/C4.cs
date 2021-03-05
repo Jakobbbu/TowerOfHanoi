@@ -8,21 +8,21 @@ namespace Hanoi.HanoiClasses
     {
         public C4(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
         {
-            startArray = ArrayAllEqual(StartPeg);
-            finalState = StateAllEqual(FinalPeg);
+            StartArray = ArrayAllEqual(StartPeg);
+            FinalState = StateAllEqual(FinalPeg);
 
-            setIgnore = new HashSet<long>();
+            
             setPrev = new HashSet<long>();
             setCurrent = new HashSet<long>();
             setNew = new Queue<long>();
 
             
-            currentDistance = 0;
-            initialState = StateToLong(startArray);
-            setCurrent.Add(initialState);
+            CurrentDistance = 0;
+            InitialState = StateToLong(StartArray);
+            setCurrent.Add(InitialState);
 
-            maxCardinality = 0;
-            maxMemory = 0;
+            MaxCardinality = 0;
+            MaxMemory = 0;
         }
 
         public override void MakeMoveForSmallDimension(byte[] state)

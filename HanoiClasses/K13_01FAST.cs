@@ -9,21 +9,20 @@ namespace Hanoi.HanoiClasses
     {
         public K13_01FAST(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
         {
-            startArray = ArrayAllEqual(StartPeg);
-            finalState = FinalState();
+            StartArray = ArrayAllEqual(StartPeg);
+            FinalState = FinalStateReturn();
 
-            setIgnore = new HashSet<long>();
             setPrev = new HashSet<long>();
             setCurrent = new HashSet<long>();
             setNew = new Queue<long>();
 
 
-            currentDistance = 0;
-            initialState = StateToLong(startArray);
-            setCurrent.Add(initialState);
+            CurrentDistance = 0;
+            InitialState = StateToLong(StartArray);
+            setCurrent.Add(InitialState);
 
-            maxCardinality = 0;
-            maxMemory = 0;
+            MaxCardinality = 0;
+            MaxMemory = 0;
         }
 
         public override void MakeMoveForSmallDimension(byte[] state)
@@ -126,12 +125,12 @@ namespace Hanoi.HanoiClasses
                 for (int x = 0; x < state.Length; x++)
                     newState[x] = state[x];
                 newState[disc] = toPeg;
-                currentState = StateToLong(newState);
-                if (!setPrev.Contains(currentState) && !setIgnore.Contains(currentState))
+                CurrentState = StateToLong(newState);
+                if (!setPrev.Contains(CurrentState))
                 {
                     
                     
-                        setNew.Enqueue(currentState);
+                        setNew.Enqueue(CurrentState);
                     
 
                 }

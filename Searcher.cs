@@ -9,7 +9,7 @@ namespace Hanoi
 {
     class Searcher
     {
-        private Tower tower;
+        private readonly Tower tower;
         public Searcher(Tower t)
         {
             this.tower = t;
@@ -19,28 +19,28 @@ namespace Hanoi
         {
             while(true)
             {
-                if (tower.maxCardinality < tower.setCurrent.Count)
-                    tower.maxCardinality = tower.setCurrent.Count;
+                if (tower.MaxCardinality < tower.setCurrent.Count)
+                    tower.MaxCardinality = tower.setCurrent.Count;
                 
                 bool match = false;
                 tower.setCurrent.AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount - 1)
-                .ForAll(num =>
+                .ForAll((Action<long>)(num =>
                 {
-                    if (num == tower.finalState)
+                    if (num == tower.FinalState)
                     {
                         
                         match = true;
                     }
-                    byte[] tmpState = tower.LongToState(num); 
+                    byte[] tmpState = tower.LongToState(num);
                     tower.MakeMoveForSmallDimension(tmpState);
-                });
+                }));
 
-                if (match) return tower.currentDistance;
+                if (match) return tower.CurrentDistance;
 
                 long mem = GC.GetTotalMemory(false);
-                if (tower.maxMemory < mem)
+                if (tower.MaxMemory < mem)
                 {
-                    tower.maxMemory = mem;
+                    tower.MaxMemory = mem;
                 }
 
                 tower.setPrev = tower.setCurrent;
@@ -53,16 +53,12 @@ namespace Hanoi
 
                 tower.setNew = new Queue<long>();
 
-                tower.incrementCurrentDistance();
+                tower.IncrementCurrentDistance();
 
-                Console.WriteLine("Current distance: " + tower.currentDistance + "     Maximum cardinality: " + tower.maxCardinality);
-                Console.WriteLine("Memory allocation: " + mem / 1000000 + "MB  \t\t Maximum memory: " + tower.maxMemory / 1000000 + "MB");
+                Console.WriteLine("Current distance: " + tower.CurrentDistance + "     Maximum cardinality: " + tower.MaxCardinality);
+                Console.WriteLine("Memory allocation: " + mem / 1000000 + "MB  \t\t Maximum memory: " + tower.MaxMemory / 1000000 + "MB");
                 Console.CursorTop -= 2;
             }
-            
         }
-
-        
-
     }
 }

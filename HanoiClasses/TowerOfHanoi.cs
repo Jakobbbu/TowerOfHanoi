@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Hanoi.HanoiClasses
 {
@@ -8,7 +6,7 @@ namespace Hanoi.HanoiClasses
     {
         void AddNewState(byte[] state, int disc, byte toPeg);
         long StateToLong(byte[] state);
-        long FinalState();
+        long FinalStateReturn();
         byte[] LongToState(long num);
         long StateAllEqual(int pegNumber);
         byte[] ArrayAllEqual(byte pegNumber);
@@ -21,16 +19,15 @@ namespace Hanoi.HanoiClasses
         protected byte NumPegs { get; }
         protected byte StartPeg { get; }
         protected byte FinalPeg { get; }
-        public byte[] startArray { get; protected set; }
-        public long finalState { get; protected set; }
-        //public byte[] newState { get; protected set; }
-        public long currentState { get; protected set; }
-        public short currentDistance { get; protected set; }
-        protected long initialState { get; set; }
-        public long maxCardinality { get; set; }
-        public long maxMemory { get; set; }
+        public byte[] StartArray { get; protected set; }
+        public long FinalState { get; protected set; }
+       
+        public long CurrentState { get; protected set; }
+        public short CurrentDistance { get; protected set; }
+        protected long InitialState { get; set; }
+        public long MaxCardinality { get; set; }
+        public long MaxMemory { get; set; }
 
-        public HashSet<long> setIgnore { get; set; }
         public HashSet<long> setPrev { get; set; }
         public HashSet<long> setCurrent { get; set; } 
         public Queue<long> setNew { get; set; }
@@ -58,7 +55,7 @@ namespace Hanoi.HanoiClasses
             }
             return num;
         }
-        public long FinalState()
+        public long FinalStateReturn()
         {
             long num = 0;
             long factor = 1;
@@ -92,7 +89,7 @@ namespace Hanoi.HanoiClasses
             return num;
         }
 
-        public byte[] ArrayAllEqual(byte pegNumber)//na zacetku
+        public byte[] ArrayAllEqual(byte pegNumber)
         {
             byte[] arr = new byte[this.NumDiscs];
             for (int i = 0; i < arr.Length; i++)
@@ -112,20 +109,20 @@ namespace Hanoi.HanoiClasses
             for (int x = 0; x < state.Length; x++)
                 newState[x] = state[x];
             newState[disc] = toPeg;
-            currentState = StateToLong(newState);
-            if (!setPrev.Contains(currentState) && !setIgnore.Contains(currentState))
+            CurrentState = StateToLong(newState);
+            if (!setPrev.Contains(CurrentState))
             {   
                 lock(setNew)
                 {
-                    setNew.Enqueue(currentState);
+                    setNew.Enqueue(CurrentState);
                 }
                 
             }
         }
         
-        public void incrementCurrentDistance()
+        public void IncrementCurrentDistance()
         {
-            this.currentDistance++;
+            this.CurrentDistance++;
         }
 
     }
