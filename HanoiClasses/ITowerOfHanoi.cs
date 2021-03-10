@@ -2,7 +2,7 @@
 
 namespace Hanoi.HanoiClasses
 {
-    interface TowerOfHanoi
+    interface ITowerOfHanoi
     {
         void AddNewState(byte[] state, int disc, byte toPeg);
         long StateToLong(byte[] state);
@@ -13,7 +13,7 @@ namespace Hanoi.HanoiClasses
         void ResetArray(bool[] array);
     }
 
-    abstract class Tower : TowerOfHanoi
+    abstract class Tower : ITowerOfHanoi
     {
         protected int NumDiscs { get; }
         protected byte NumPegs { get; }
@@ -21,6 +21,8 @@ namespace Hanoi.HanoiClasses
         protected byte FinalPeg { get; }
         public byte[] StartArray { get; protected set; }
         public long FinalState { get; protected set; }
+
+        public bool IsMoved = false;
        
         public long CurrentState { get; protected set; }
         public short CurrentDistance { get; protected set; }
@@ -28,9 +30,10 @@ namespace Hanoi.HanoiClasses
         public long MaxCardinality { get; set; }
         public long MaxMemory { get; set; }
 
-        public HashSet<long> setPrev { get; set; }
-        public HashSet<long> setCurrent { get; set; } 
-        public Queue<long> setNew { get; set; }
+        public HashSet<long> SetPrev { get; set; }
+        public HashSet<long> SetCurrent { get; set; }
+        public HashSet<long> SetCurrent2 { get; set; }
+        public Queue<long> SetNew { get; set; }
 
         public Tower(byte startPeg, byte finalPeg, int numDiscs)
         {
@@ -38,6 +41,19 @@ namespace Hanoi.HanoiClasses
             this.StartPeg = startPeg;
             this.FinalPeg = finalPeg;
             this.NumPegs = 4;
+
+            SetPrev = new HashSet<long>();
+            SetCurrent = new HashSet<long>();            
+            SetNew = new Queue<long>();
+
+            CurrentDistance = 0;
+            MaxCardinality = 0;
+            MaxMemory = 0;
+
+            StartArray = ArrayAllEqual(StartPeg);
+            FinalState = StateAllEqual(FinalPeg);
+            InitialState = StateToLong(StartArray);
+            SetCurrent.Add(InitialState);
         }
         
       
@@ -72,7 +88,7 @@ namespace Hanoi.HanoiClasses
             for (int i = NumDiscs - 1; i >= 0; i--)
             {
                 tmpState[i] = (byte)(num % this.NumPegs);
-                num = num / this.NumPegs;
+                num /= this.NumPegs;
             }
             return tmpState;
         }
@@ -110,11 +126,15 @@ namespace Hanoi.HanoiClasses
                 newState[x] = state[x];
             newState[disc] = toPeg;
             CurrentState = StateToLong(newState);
-            if (!setPrev.Contains(CurrentState))
-            {   
-                lock(setNew)
+            if (!SetPrev.Contains(CurrentState))
+            {
+                if (disc == NumDiscs - 1 && !IsMoved)
                 {
-                    setNew.Enqueue(CurrentState);
+                    IsMoved = true;
+                }
+                lock (SetNew)
+                {
+                    SetNew.Enqueue(CurrentState);
                 }
                 
             }

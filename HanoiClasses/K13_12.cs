@@ -6,24 +6,8 @@ namespace Hanoi.HanoiClasses
 {
     class K13_12 : Tower
     {
-        public K13_12(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
-        {
-            StartArray = ArrayAllEqual(StartPeg);
-            FinalState = StateAllEqual(FinalPeg);
-
-            setPrev = new HashSet<long>();
-            setCurrent = new HashSet<long>();
-            setNew = new Queue<long>();
-
-
-            CurrentDistance = 0;
-            InitialState = StateToLong(StartArray);
-            setCurrent.Add(InitialState);
-
-            MaxCardinality = 0;
-            MaxMemory = 0;
-        }
-
+        public K13_12(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs) { }
+      
         public override void MakeMoveForSmallDimension(byte[] state)
         {
             bool[] canMoveArray = new bool[this.NumPegs];
@@ -40,7 +24,11 @@ namespace Hanoi.HanoiClasses
                         {
                             if (canMoveArray[j])
                             {
-                                lock (setNew)
+                                if (i == NumDiscs - 1 && !IsMoved)
+                                {
+                                    IsMoved = true;
+                                }
+                                lock (SetNew)
                                 {
                                     AddNewState(state, i, j);
                                 }
@@ -52,7 +40,11 @@ namespace Hanoi.HanoiClasses
                     {
                         if (canMoveArray[0])
                         {
-                            lock (setNew)
+                            if (i == NumDiscs - 1 && !IsMoved)
+                            {
+                                IsMoved = true;
+                            }
+                            lock (SetNew)
                             {
                                 AddNewState(state, i, 0);
                             }

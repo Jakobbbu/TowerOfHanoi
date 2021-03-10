@@ -6,29 +6,12 @@ namespace Hanoi.HanoiClasses
 {
     class K13e : Tower
     {
-        public K13e(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
-        {
-            StartArray = ArrayAllEqual(StartPeg);
-            FinalState = StateAllEqual(FinalPeg);
-
-            
-            setPrev = new HashSet<long>();
-            setCurrent = new HashSet<long>();
-            setNew = new Queue<long>();
-
-
-            CurrentDistance = 0;
-            InitialState = StateToLong(StartArray);
-            setCurrent.Add(InitialState);
-
-            MaxCardinality = 0;
-            MaxMemory = 0;
-        }
-
+        public K13e(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs) { }
+        
         public override void MakeMoveForSmallDimension(byte[] state)
         {
             bool[] InnercanMoveArray = new bool[this.NumPegs];
-            ResetArray(InnercanMoveArray); //can move array je globalna
+            ResetArray(InnercanMoveArray); 
             byte[] innernewState;
 
             for (int i = 0; i < NumDiscs; i++)
@@ -45,13 +28,16 @@ namespace Hanoi.HanoiClasses
                                 for (int x = 0; x < state.Length; x++)
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
-                                long innercurrentState = StateToLong(innernewState); // new state je globalna
-                                // Zaradi takih preverjanj potrebujemo hitro iskanje!
-                                if (!setPrev.Contains(innercurrentState))
+                                long innercurrentState = StateToLong(innernewState); 
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
 
                                 }
@@ -67,11 +53,15 @@ namespace Hanoi.HanoiClasses
                                 innernewState[x] = state[x];
                             innernewState[i] = 0;
                             long innercurrentState = StateToLong(innernewState);
-                            if (!setPrev.Contains(innercurrentState))
+                            if (!SetPrev.Contains(innercurrentState))
                             {
-                                lock (setNew)
+                                if (i == NumDiscs - 1 && !IsMoved)
                                 {
-                                    setNew.Enqueue(innercurrentState);
+                                    IsMoved = true;
+                                }
+                                lock (SetNew)
+                                {
+                                    SetNew.Enqueue(innercurrentState);
                                 }
 
                             }
@@ -88,11 +78,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
 
                                 }
@@ -110,11 +104,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
 
                                 }

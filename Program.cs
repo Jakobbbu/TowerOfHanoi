@@ -21,17 +21,32 @@ namespace Hanoi
                  }
                  while (k <= 0 || k > 15);
 
+                int c;
+                do
+                {
+                    Console.Write("Enter 0 for one direction search method\nEnter 1 for biderctional search:\n");
+                    c = int.Parse(Console.ReadLine());
+                }
+                while (c < 0 || c > 1);
 
-                 Console.WriteLine("*******RUNING PROGRAM*******");
-                 Console.WriteLine($"Running case: {type} with {k} discs:");
-                 Stopwatch sw = Stopwatch.StartNew();
-
-
-                 Tower tower = Factory.GetTower(type, k);
-                 if (tower != null)
-                 {
-                     Searcher searcher = new Searcher(tower);
-                     int length = searcher.SearchShortestPath();
+                Tower tower = Factory.GetTower(type, k);
+                int length;
+                if (tower != null)
+                {
+                    Console.WriteLine("*******RUNING PROGRAM*******");
+                    Console.WriteLine($"Running case: {type} with {k} discs:");
+                    Stopwatch sw = Stopwatch.StartNew();
+                    if (c == 0)
+                    {
+                        Searcher searcher = new Searcher(tower);
+                        length = searcher.SearchShortestPath();
+                    }
+                    else
+                    {
+                        Searcher2Dir searcher2 = new Searcher2Dir(tower);
+                        length = searcher2.SearchShortestPath();
+                    }
+                    
 
                     Console.WriteLine();
                     Console.WriteLine($"\n\nDimension: {k}; Steps: {length}; Time: {sw.Elapsed.TotalSeconds} seconds");

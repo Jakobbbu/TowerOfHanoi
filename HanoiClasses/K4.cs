@@ -6,25 +6,8 @@ namespace Hanoi.HanoiClasses
 {
     class K4 : Tower
     {
-        public K4(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
-        {
-            StartArray = ArrayAllEqual(StartPeg);
-            FinalState = StateAllEqual(FinalPeg);
-
-            
-            setPrev = new HashSet<long>();
-            setCurrent = new HashSet<long>();
-            setNew = new Queue<long>();
-
-
-            CurrentDistance = 0;
-            InitialState = StateToLong(StartArray);
-            setCurrent.Add(InitialState);
-
-            MaxCardinality = 0;
-            MaxMemory = 0;
-        }
-
+        public K4(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs) { }
+        
         public override void MakeMoveForSmallDimension(byte[] state)
         {
             bool[] innercanMoveArray = new bool[this.NumPegs];
@@ -46,11 +29,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if(i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
                                 }
 
@@ -69,11 +56,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
                                 }
 
@@ -91,11 +82,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
                                 }
 
@@ -113,11 +108,15 @@ namespace Hanoi.HanoiClasses
                                     innernewState[x] = state[x];
                                 innernewState[i] = j;
                                 long innercurrentState = StateToLong(innernewState);
-                                if (!setPrev.Contains(innercurrentState))
+                                if (!SetPrev.Contains(innercurrentState))
                                 {
-                                    lock (setNew)
+                                    if (i == NumDiscs - 1 && !IsMoved)
                                     {
-                                        setNew.Enqueue(innercurrentState);
+                                        IsMoved = true;
+                                    }
+                                    lock (SetNew)
+                                    {
+                                        SetNew.Enqueue(innercurrentState);
                                     }
 
                                 }

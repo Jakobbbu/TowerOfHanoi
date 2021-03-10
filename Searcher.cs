@@ -14,16 +14,15 @@ namespace Hanoi
         {
             this.tower = t;
         }
-
         public int SearchShortestPath()
         {
             while(true)
             {
-                if (tower.MaxCardinality < tower.setCurrent.Count)
-                    tower.MaxCardinality = tower.setCurrent.Count;
+                if (tower.MaxCardinality < tower.SetCurrent.Count)
+                    tower.MaxCardinality = tower.SetCurrent.Count;
                 
                 bool match = false;
-                tower.setCurrent.AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount - 1)
+                tower.SetCurrent.AsParallel().WithDegreeOfParallelism(Environment.ProcessorCount - 1)
                 .ForAll((Action<long>)(num =>
                 {
                     if (num == tower.FinalState)
@@ -43,15 +42,15 @@ namespace Hanoi
                     tower.MaxMemory = mem;
                 }
 
-                tower.setPrev = tower.setCurrent;
-                tower.setCurrent = new HashSet<long>();
-                int elts = tower.setNew.Count;
+                tower.SetPrev = tower.SetCurrent;
+                tower.SetCurrent = new HashSet<long>();
+                int elts = tower.SetNew.Count;
                 for (int i = 0; i < elts; i++)
                 {
-                    tower.setCurrent.Add(tower.setNew.Dequeue());
+                    tower.SetCurrent.Add(tower.SetNew.Dequeue());
                 }
 
-                tower.setNew = new Queue<long>();
+                tower.SetNew = new Queue<long>();
 
                 tower.IncrementCurrentDistance();
 

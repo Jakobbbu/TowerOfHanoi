@@ -7,143 +7,174 @@ namespace Hanoi.HanoiClasses
 {
     class K13_01FAST : Tower
     {
-        public K13_01FAST(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs)
-        {
-            StartArray = ArrayAllEqual(StartPeg);
-            FinalState = FinalStateReturn();
-
-            setPrev = new HashSet<long>();
-            setCurrent = new HashSet<long>();
-            setNew = new Queue<long>();
-
-
-            CurrentDistance = 0;
-            InitialState = StateToLong(StartArray);
-            setCurrent.Add(InitialState);
-
-            MaxCardinality = 0;
-            MaxMemory = 0;
-        }
-
+        public K13_01FAST(byte startPeg, byte endPeg, int numDiscs) : base(startPeg, endPeg, numDiscs) { }
+       
         public override void MakeMoveForSmallDimension(byte[] state)
         {
             bool[] canMoveArray = new bool[this.NumPegs];
             ResetArray(canMoveArray);
-            byte[] newState;
 
-            for (int i = 0; i < NumDiscs - 2; i++)
+            if (NumDiscs == 1)
             {
-                if (canMoveArray[state[i]])
+                IsMoved = true;
+                aAddNewState(state, NumDiscs - 1, 1);
+                return;
+            }
+
+            if (!IsMoved)
+            {
+              
+                for (int i = 0; i < NumDiscs - 2; i++)
                 {
-                    if (state[i] == 0)
+                    if (canMoveArray[state[i]])
                     {
-                        for (byte j = 1; j < NumPegs; j++)
+                        if (state[i] == 0)
                         {
-                            if (canMoveArray[j])
+                            for (byte j = 1; j < NumPegs; j++)
                             {
-                                lock(setNew){
-                                    aAddNewState(state, i, j);
+                                if (canMoveArray[j])
+                                {
+
+                                    lock (SetNew)
+                                    {
+                                        aAddNewState(state, i, j);
+                                    }
+
                                 }
-                                
                             }
                         }
-                    }
-                    else // From other vertices we can only move to center
-                    {
-                        if (canMoveArray[0])
+                        else // From other vertices we can only move to center
                         {
-                            lock (setNew)
+                            if (canMoveArray[0])
                             {
-                                aAddNewState(state, i, 0);
+                                lock (SetNew)
+                                {
+                                    aAddNewState(state, i, 0);
+                                }
+
                             }
-                            
                         }
                     }
+                    canMoveArray[state[i]] = false;
                 }
-                canMoveArray[state[i]] = false;
-            }
-            // The second biggest:
-            if (state[NumDiscs - 2] == 0 && state[NumDiscs - 1] == 0)
-            {
-                if (canMoveArray[0] && canMoveArray[2])
+                // The second biggest:
+                if (state[NumDiscs - 2] == 0 && state[NumDiscs - 1] == 0)
                 {
-                    lock(setNew)
+                    if (canMoveArray[0] && canMoveArray[2])
                     {
-                        aAddNewState(state, NumDiscs - 2, 2);
+                        lock (SetNew)
+                        {
+                            aAddNewState(state, NumDiscs - 2, 2);
+                        }
                     }
+                    if (canMoveArray[0] && canMoveArray[3])
+                    {
+                        lock (SetNew)
+                        {
+                            aAddNewState(state, NumDiscs - 2, 3);
+                        }
+                    }
+                    canMoveArray[0] = false;
                 }
-                if (canMoveArray[0] && canMoveArray[3])
+                else if (state[NumDiscs - 2] == 0 && state[NumDiscs - 1] == 1)
                 {
-                    lock (setNew)
+                    if (canMoveArray[0] && canMoveArray[1])
                     {
-                        aAddNewState(state, NumDiscs - 2, 3);
-                    }
-                }
-                canMoveArray[0] = false;
-            }
-            else if (state[NumDiscs - 2] == 0 && state[NumDiscs - 1] == 1)
-            {
-                if (canMoveArray[0] && canMoveArray[1])
-                {
-                    lock(setNew)
-                    {
-                        aAddNewState(state, NumDiscs - 2, 1);
-                    }
-                    
-                }
-                canMoveArray[0] = false;
-            }
-            else if (state[NumDiscs - 2] > 1 && state[NumDiscs - 1] == 1)
-            {
-                if (canMoveArray[state[NumDiscs - 2]] && canMoveArray[0])
-                {
-                    lock(setNew)
-                    {
-                        aAddNewState(state, NumDiscs - 2, 0);
-                    }
-                    
-                }
-                canMoveArray[state[NumDiscs - 2]] = false;
-            }
-            // Biggest disk is moved only once
-            if (state[NumDiscs - 1] == 0)
-            {
-                if (canMoveArray[0] && canMoveArray[1])
-                {
-                    lock (setNew)
-                    {
-                        aAddNewState(state, NumDiscs - 1, 1);
-                    }
-                    
-                    //Console.WriteLine("The biggest is moved!\n");
-                }
-            }
+                        lock (SetNew)
+                        {
+                            aAddNewState(state, NumDiscs - 2, 1);
+                        }
 
+                    }
+                    canMoveArray[0] = false;
+                }
+                else if (state[NumDiscs - 2] > 1 && state[NumDiscs - 1] == 1)
+                {
+                    if (canMoveArray[state[NumDiscs - 2]] && canMoveArray[0])
+                    {
+                        lock (SetNew)
+                        {
+                            aAddNewState(state, NumDiscs - 2, 0);
+                        }
+
+                    }
+                    canMoveArray[state[NumDiscs - 2]] = false;
+                }
+                // Biggest disk is moved only once
+                if (state[NumDiscs - 1] == 0)
+                {
+                    if (canMoveArray[0] && canMoveArray[1])
+                    {
+                        IsMoved = true;
+
+                        lock (SetNew)
+                        {
+                            aAddNewState(state, NumDiscs - 1, 1);
+                        }
+
+                    }
+                }
+             
+            }
+            if (IsMoved)  
+            {
+
+                for (int i = 0; i < NumDiscs; i++)
+                {
+                    if (canMoveArray[state[i]])
+                    {
+                        if (state[i] == 0)
+                        {
+                            for (byte j = 1; j < NumPegs; j++)
+                            {
+                                if (canMoveArray[j])
+                                {
+
+                                    lock (SetNew)
+                                    {
+                                        aAddNewState(state, i, j);
+                                    }
+
+                                }
+                            }
+                        }
+                        else // From other vertices we can only move to center
+                        {
+                            if (canMoveArray[0])
+                            {
+                                lock (SetNew)
+                                {
+                                    aAddNewState(state, i, 0);
+                                }
+
+                            }
+                        }
+                    }
+                    canMoveArray[state[i]] = false;
+                }
+                                
+            }
             void aAddNewState(byte[] state, int disc, byte toPeg)
             {
+                byte[] newState;
                 newState = new byte[state.Length];
                 for (int x = 0; x < state.Length; x++)
                     newState[x] = state[x];
                 newState[disc] = toPeg;
                 CurrentState = StateToLong(newState);
-                if (!setPrev.Contains(CurrentState))
+                if (!SetPrev.Contains(CurrentState))
                 {
-                    
-                    
-                        setNew.Enqueue(CurrentState);
-                    
+                    lock (SetNew)
+                    {
+                        SetNew.Enqueue(CurrentState);
+                    }
 
                 }
-               
-                
+
             }
-
-            
-
 
         }
 
-      
     }
 }
 
